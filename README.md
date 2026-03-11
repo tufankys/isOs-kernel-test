@@ -1,8 +1,7 @@
 A simple 32 bit(for now) kernel that will presumably be used for The Holy IsOs
 
 Includes:
-a fully working print functions
-a semi-broken getch function
+a fully working print function and a semi-broken getch function
 
 Dependencies:
 sudo apt install gcc
