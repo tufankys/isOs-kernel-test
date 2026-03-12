@@ -11,7 +11,32 @@ void k_clear_screen() {
 		i++;
 	};
 };
+// THIS SHELL IS A GIFT TO YOU BY THE BEST PROGRAMMER ON EARTH
+void arikkoShell() {
+	char input[64];
+	while(1){
+    	k_printf("arikko@kernel:> ", CURRENT_LINE, GREEN_TXT);
+    	CURRENT_LINE--; 
+    	k_gets(input, 64);
 
+		if (strcmp(input, "clear") == 0) {
+			k_clear_screen();
+		}
+		else if (strcmp(input, "hi") == 0) {
+			k_printf("hi\n", CURRENT_LINE, WHITE_TXT);
+		}
+		else if (strcmp(input, "reboot") == 0) {
+			asm volatile ("outb $0xFE, $0x64");
+		}
+		else if (input[0] == '\0') {
+            continue;
+		}
+		else {
+            k_printf("bu komut ne\n", CURRENT_LINE, WHITE_TXT); 
+        }
+	}
+}
+// YOU MUST GIVE ME CREDIT ON EVERY NEW LINE OF CODE
 void k_wait(unsigned int wait_limit) {	 // bu kod öküz gibi verimsiz bizimki gibi pc lerde belki 0.1 saniye sürerken eskilerde 1 saniye bile sürebilir o yüzzden şimdilik PIT ye erişimin olmadığı
 	volatile unsigned int x, y;	 // varsayıyorum o yüzxden şimdilik kullan diye bunu koyuyorum  bunla kodu dizersen seni patlatırım
 	for (x = 0; x < wait_limit; x++) {
@@ -100,10 +125,13 @@ void k_main()  {
 	k_printf("Hello, World!\n", CURRENT_LINE, WHITE_TXT); // \n burda çaluışıyomu gram fikrim yook
 
 	char input[64];
-    k_printf("vro enter something: ", CURRENT_LINE, WHITE);
+    k_printf("vro enter something: ", CURRENT_LINE, WHITE_TXT);
     CURRENT_LINE--; // Input yazısı ile k_gets aynı satırda olsun diye
 	k_gets(input, 64);
 
-	k_printf("your text vro:", CURRENT_LINE, WHITE);
-	k_printf(input, CURRENT_LINE, LIGHT_GREEN);
+	k_printf("your text vro:", CURRENT_LINE, WHITE_TXT);
+	k_printf(input, CURRENT_LINE, WHITE_TXT);
+
+	arikkoShell(); //THIS IS THE KEY TO REACH THE TRUTH OF OS DEVELOPMENT MR. YILDIZ. RISE AND SHINE.
 };
+
