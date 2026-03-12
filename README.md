@@ -1,7 +1,7 @@
 # isos-kernel
 
 A simple 32 bit(for now) kernel that will presumably be used for **The Holy IsOs**.
-This project is not recommended for daily usage as it is a project made for fun and learning.
+This project is not recommended for daily usage as it is made for fun and learning.
 
 ## Includes:
 
