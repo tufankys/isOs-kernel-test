@@ -1,14 +1,11 @@
 # isos-kernel
 
 A simple 32 bit(for now) kernel that will presumably be used for **The Holy IsOs**.
-This project is not recommended for daily usage as it is made for fun and learning.
+This project is not recommended for daily usage as it is being made for fun and learning.
 
 ## Includes:
 
-+ a fully working print function
-+ a fully working gets function
-+ a fully working strcmp function
-+ a very basic shell with commands like reboot, clear
++ a lot of dehşetli functions
 
 ## Dependencies:
 
@@ -21,5 +18,5 @@ sudo apt install nasm
 ## Building:
 
 ```bash
-sh build.sh
+sh build/build.sh
 ```
