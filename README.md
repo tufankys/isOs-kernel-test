@@ -6,6 +6,7 @@ a fully working print function and a semi-broken getch function
 a fully working gets function
 a fully working strcmp function
 a very basic shell with commands like reboot, clear
+
 Dependencies:
 sudo apt install gcc
 sudo apt install qemu-system-i386
