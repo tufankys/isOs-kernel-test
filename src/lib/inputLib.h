@@ -3,17 +3,11 @@
 
 #include "cursorLib.h"
 
-static const char scancode_ascii[128] = {
-    0,  27, '1','2','3','4','5','6','7','8','9','0','-','=','\b',
-    '\t','q','w','e','r','t','y','u','i','o','p','[',']','\n', 0,
-    'a','s','d','f','g','h','j','k','l',';','\'','`', 0,'\\','z','x',
-    'c','v','b','n','m',',','.','/', 0,  '*', 0, ' ', 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '-', 0, 0, '+', 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
-};
+extern unsigned int CURRENT_LINE;
+extern unsigned int CURRENT_COL;
 
 
-void k_printf(char *message, unsigned int line, unsigned int color) {
+static void k_printf(char *message, unsigned int line, unsigned int color) {
     char *vidmem = (char *) 0xb8000;
     unsigned int i;
 
@@ -37,7 +31,7 @@ void k_printf(char *message, unsigned int line, unsigned int color) {
 	update_cursor(final_x, final_y);
 }									
 									
-void k_printf_at(char *message, unsigned int line, unsigned int col, unsigned int color) {
+static void k_printf_at(char *message, unsigned int line, unsigned int col, unsigned int color) {
     char *vidmem = (char *) 0xb8000;
     unsigned int i;
 
@@ -66,6 +60,7 @@ void k_printf_at(char *message, unsigned int line, unsigned int col, unsigned in
 	update_cursor(final_x, final_y);
 }
 
+
 unsigned char k_getch() {
     unsigned char scancode;
     unsigned char status;
@@ -85,7 +80,9 @@ unsigned char k_getch() {
     }
 }
 
-void k_gets(char *buffer, unsigned int max_size) {
+
+
+static void k_gets(char *buffer, unsigned int max_size) {
     unsigned int i = 0;
     unsigned short pos = get_cursor_position();
     unsigned int start_col = pos % 80;
