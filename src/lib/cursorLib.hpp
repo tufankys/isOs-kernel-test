@@ -1,5 +1,5 @@
-#ifndef CURSORLIB_H
-#define CURSORLIB_H
+#ifndef CURSORLIB_HPP
+#define CURSORLIB_HPP
 
 extern unsigned int CURRENT_LINE;
 extern unsigned int CURRENT_COL;

@@ -1,34 +1,37 @@
-#ifndef MAINLIB_H
-#define MAINLIB_H
+#ifndef MAINLIB_HPP
+#define MAINLIB_HPP
 
-#define BLACK_TXT 0x00
-#define BLUE_TXT 0x01
-#define GREEN_TXT 0x02
-#define CYAN_TXT 0x03
-#define RED_TXT 0x04
-#define PURPLE_TXT 0x05
-#define BROWN_TXT 0x06
-#define WHITE_TXT 0x07
-#define GRAY_TXT 0x08
-#define LIGHTBLUE_TXT 0x09
+#include "inputLib.hpp"
+
+#define BLACK_TXT      0x00
+#define BLUE_TXT       0x01
+#define GREEN_TXT      0x02
+#define CYAN_TXT       0x03
+#define RED_TXT        0x04
+#define PURPLE_TXT     0x05
+#define BROWN_TXT      0x06
+#define WHITE_TXT      0x07
+#define GRAY_TXT       0x08
+#define LIGHTBLUE_TXT  0x09
 
 #define MAX_WORDS 16
 #define KEYBOARD_BUFFER_SIZE 256
 
-#include "inputLib.h"
 
-static int strcmp(char *s1, char *s2) {
+inline int strcmp(const char* s1, const char* s2) {
     while (*s1 && (*s1 == *s2)) {
         s1++;
         s2++;
     }
-    return *(unsigned char *)s1 - *(unsigned char *)s2;
+    return (int)(*(const unsigned char*)s1) - 
+           (int)(*(const unsigned char*)s2);
 }
 
-static void split_and_store(char *str, char **word_list, int *word_count) {
+
+inline void split_and_store(char* str, char** word_list, int* word_count) {
     if (str == 0 || word_list == 0) return;
 
-    char *ptr = str;
+    char* ptr = str;
     int count = 0;
     int in_word = 0;
 
@@ -37,7 +40,7 @@ static void split_and_store(char *str, char **word_list, int *word_count) {
             *ptr = '\0';
             in_word = 0;
         } else {
-            if (in_word == 0) {
+            if (!in_word) {
                 word_list[count] = ptr;
                 count++;
                 in_word = 1;
@@ -48,7 +51,8 @@ static void split_and_store(char *str, char **word_list, int *word_count) {
     *word_count = count;
 }
 
-static void toString(int num, char *str) {
+
+inline void toString(int num, char* str) {
     int i = 0;
     int is_negative = 0;
 
@@ -60,12 +64,12 @@ static void toString(int num, char *str) {
 
     if (num < 0) {
         is_negative = 1;
-        num = -num;
+        num = -num; 
     }
 
     while (num != 0) {
         int rem = num % 10;
-        str[i++] = rem + '0';
+        str[i++] = (char)(rem + '0');
         num = num / 10;
     }
 

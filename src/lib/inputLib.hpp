@@ -1,93 +1,85 @@
-#ifndef INPUTLIB_H
-#define INPUTLIB_H
+#ifndef INPUTLIB_HPP
+#define INPUTLIB_HPP
 
-#include "cursorLib.h"
+#include "cursorLib.hpp"
 
 extern unsigned int CURRENT_LINE;
 extern unsigned int CURRENT_COL;
 
+inline void k_printf(const char* message, unsigned int line, unsigned int color) {
+    char* vidmem = (char*)0xb8000;
+    unsigned int i = (line * 80 * 2);
 
-static void k_printf(char *message, unsigned int line, unsigned int color) {
-    char *vidmem = (char *) 0xb8000;
-    unsigned int i;
+    while (*message != 0) {
+        if (i >= 4000) break;
 
-    i = (line * 80 * 2);
-
-    while(*message != 0) {
-        if (i >= 4000) break; 
-
-        if(*message == '\n') {
+        if (*message == '\n') {
             line++;
             i = (line * 80 * 2);
         } else {
             vidmem[i++] = *message;
-            vidmem[i++] = (char)color;
+            vidmem[i++] = (char)(color);
         }
         message++;
     }
 
-	unsigned int final_x = (i / 2) % 80;
-	unsigned int final_y = (i / 2) / 80;
-	update_cursor(final_x, final_y);
-}									
-									
-static void k_printf_at(char *message, unsigned int line, unsigned int col, unsigned int color) {
-    char *vidmem = (char *) 0xb8000;
-    unsigned int i;
+    unsigned int final_x = (i / 2) % 80;
+    unsigned int final_y = (i / 2) / 80;
+    update_cursor((int)(final_x), (int)(final_y));
+}
 
-    i = (line * 80 + col) * 2;
 
-    while(*message != 0) {
+inline void k_printf_at(const char* message, unsigned int line, unsigned int col, unsigned int color) {
+    char* vidmem = (char*)0xb8000;
+    unsigned int i = (line * 80 + col) * 2;
+
+    while (*message != 0) {
         if (i >= 4000) break;
 
-        if(*message == '\n') {
+        if (*message == '\n') {
             line++;
             CURRENT_LINE = line;
             col = 0;
             i = (line * 80 + col) * 2;
         } else {
             vidmem[i++] = *message;
-            vidmem[i++] = (unsigned char)color;
+            vidmem[i++] = (unsigned char)(color);
             col++;
         }
         message++;
     }
 
     CURRENT_COL = col;
-
     unsigned int final_x = (i / 2) % 80;
-	unsigned int final_y = (i / 2) / 80;
-	update_cursor(final_x, final_y);
+    unsigned int final_y = (i / 2) / 80;
+    update_cursor((int)(final_x), (int)(final_y));
 }
 
 
-unsigned char k_getch() {
+inline unsigned char k_getch() {
     unsigned char scancode;
     unsigned char status;
 
-    while(1) {
+    while (1) {
         asm volatile ("inb $0x64, %0" : "=a"(status));
 
         if (status & 0x01) {
             asm volatile ("inb $0x60, %0" : "=a"(scancode));
 
             if (!(scancode & 0x80)) {
-                unsigned char ascii = scancode_ascii[scancode];
+                unsigned char ascii = (unsigned char)(scancode_ascii[scancode]);
                 if (ascii) return ascii;
             }
         }
-
     }
 }
 
 
-
-static void k_gets(char *buffer, unsigned int max_size) {
+inline void k_gets(char* buffer, unsigned int max_size) {
     unsigned int i = 0;
     unsigned short pos = get_cursor_position();
-    unsigned int start_col = pos % 80;
     unsigned int line = pos / 80;
-    unsigned int current_col = start_col;
+    unsigned int current_col = pos % 80;
 
     while (i < max_size - 1) {
         unsigned char c = k_getch();
@@ -96,34 +88,32 @@ static void k_gets(char *buffer, unsigned int max_size) {
             buffer[i] = '\0';
             CURRENT_LINE = line + 1;
             CURRENT_COL = 0;
-            update_cursor(0, line + 1); 
+            update_cursor(0, (int)(line + 1));
             break;
         } 
+
         else if (c == '\b') {
             if (i > 0) {
                 i--;
                 current_col--;
-                CURRENT_LINE = line;
-                CURRENT_COL = current_col;
                 k_printf_at(" ", line, current_col, 0x07);
-                CURRENT_LINE = line;
-                CURRENT_COL = current_col;
-                update_cursor(current_col, line);
+                update_cursor((int)(current_col), (int)(line));
             }
         } 
+
         else {
-            buffer[i] = c;
-            char temp[2] = {c, 0};
+            buffer[i] = (char)(c);
+            char temp[2] = { (char)(c), '\0' };
             
             k_printf_at(temp, line, current_col, 0x07);
             
             i++;
             current_col++;
-            CURRENT_LINE = line;
-            CURRENT_COL = current_col;
-            update_cursor(current_col, line);
+            update_cursor((int)(current_col), (int)(line));
         }
     }
+    CURRENT_LINE = line;
+    CURRENT_COL = current_col;
 }
 
 #endif
