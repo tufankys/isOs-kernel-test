@@ -1,15 +1,16 @@
 #ifndef SHELL_HPP
 #define SHELL_HPP
 
-#include "mainLib.hpp"
+#include "commands.hpp"
 
 
 extern unsigned int CURRENT_LINE;
 extern unsigned int CURRENT_COL;
+extern unsigned int CURRENT_COLOR;
 
 inline void arikkoShell() {
     while (true) {
-        k_printf_at("arikko@kernel/> ", CURRENT_LINE, CURRENT_COL, WHITE_TXT);
+        k_printf_at("arikko@kernel/> ", CURRENT_LINE, CURRENT_COL, CURRENT_COLOR);
         
         char input[64];
         k_gets(input, 64);
@@ -20,25 +21,13 @@ inline void arikkoShell() {
 
         split_and_store(input, words, &count);
         //toString(count, countString);
-
-        if (count > 0) {
-
-            if (strcmp(words[0], "ping") == 0) {
-                k_printf_at("\nPong!\n", CURRENT_LINE, CURRENT_COL, WHITE_TXT);
-            } 
-
-            else if (strcmp(words[0], "hello") == 0) {
-                k_printf_at("\nWorld!\n", CURRENT_LINE, CURRENT_COL, WHITE_TXT);
-            } 
-
-            else {
-                k_printf_at("\nCommand not found: ", CURRENT_LINE, CURRENT_COL, WHITE_TXT);
-                k_printf_at(words[0], CURRENT_LINE, CURRENT_COL, WHITE_TXT);
-                k_printf_at("\n", CURRENT_LINE, CURRENT_COL, WHITE_TXT);
-            }    
+        
+        if (count > 0) { 
+            searchCommand(words[0], words); 
         } else {
-            k_printf_at("\n", CURRENT_LINE, CURRENT_COL, WHITE_TXT);
+            k_printf_at("\n", CURRENT_LINE, CURRENT_COL, CURRENT_COLOR);
         }
+        
     }
 }
 

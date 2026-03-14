@@ -5,29 +5,7 @@
 
 extern unsigned int CURRENT_LINE;
 extern unsigned int CURRENT_COL;
-
-inline void k_printf(const char* message, unsigned int line, unsigned int color) {
-    char* vidmem = (char*)0xb8000;
-    unsigned int i = (line * 80 * 2);
-
-    while (*message != 0) {
-        if (i >= 4000) break;
-
-        if (*message == '\n') {
-            line++;
-            i = (line * 80 * 2);
-        } else {
-            vidmem[i++] = *message;
-            vidmem[i++] = (char)(color);
-        }
-        message++;
-    }
-
-    unsigned int final_x = (i / 2) % 80;
-    unsigned int final_y = (i / 2) / 80;
-    update_cursor((int)(final_x), (int)(final_y));
-}
-
+extern unsigned int CURRENT_COLOR;
 
 inline void k_printf_at(const char* message, unsigned int line, unsigned int col, unsigned int color) {
     char* vidmem = (char*)0xb8000;
@@ -96,7 +74,7 @@ inline void k_gets(char* buffer, unsigned int max_size) {
             if (i > 0) {
                 i--;
                 current_col--;
-                k_printf_at(" ", line, current_col, 0x07);
+                k_printf_at(" ", line, current_col, CURRENT_COLOR);
                 update_cursor((int)(current_col), (int)(line));
             }
         } 
@@ -105,7 +83,7 @@ inline void k_gets(char* buffer, unsigned int max_size) {
             buffer[i] = (char)(c);
             char temp[2] = { (char)(c), '\0' };
             
-            k_printf_at(temp, line, current_col, 0x07);
+            k_printf_at(temp, line, current_col, CURRENT_COLOR);
             
             i++;
             current_col++;
