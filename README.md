@@ -1,6 +1,6 @@
 # isos-kernel
 
-A simple 64 kernel that will presumably be used for **The Holy IsOs**.
+A simple 64bit kernel that will presumably be used for **The Holy IsOs**.
 This project is not recommended for daily usage as it is being made for fun and learning.
 
 ## Dependencies:
